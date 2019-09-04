@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en"><!--
+ __  __                __                                     __
+/\ \/\ \              /\ \             __                    /\ \
+\ \ \_\ \   __  __    \_\ \      __   /\_\      __       ___ \ \ \/'\
+ \ \  _  \ /\ \/\ \   /'_` \   /'__`\ \/\ \   /'__`\    /'___\\ \ , <
+  \ \ \ \ \\ \ \_\ \ /\ \L\ \ /\  __/  \ \ \ /\ \L\.\_ /\ \__/ \ \ \\`\
+   \ \_\ \_\\/`____ \\ \___,_\\ \____\ _\ \ \\ \__/.\_\\ \____\ \ \_\ \_\
+    \/_/\/_/ `/___/> \\/__,_ / \/____//\ \_\ \\/__/\/_/ \/____/  \/_/\/_/
+                /\___/                \ \____/
+                \/__/                  \/___/
+
+Powered by Hydejack v8.5.0 <https://hydejack.com/>
+-->
+
+
+
+
+
+
+
+
+
+
+
+<head>
+  
+
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+
+
+
+  
+<!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>An Introduction to Persistent Homology | The Delta</title>
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="An Introduction to Persistent Homology" />
+<meta name="author" content="John Bochicchio" />
+<meta property="og:locale" content="en_us" />
+<meta name="description" content="A basic introduction to the mathematics of persistent homology. This will be followed up with a post detailing applications to data science and showing code used to compute the persistent homology of some selected structures." />
+<meta property="og:description" content="A basic introduction to the mathematics of persistent homology. This will be followed up with a post detailing applications to data science and showing code used to compute the persistent homology of some selected structures." />
+<link rel="canonical" href="http://localhost:4000/2019-09-03-Persistent-Homology-i/" />
+<meta property="og:url" content="http://localhost:4000/2019-09-03-Persistent-Homology-i/" />
+<meta property="og:site_name" content="The Delta" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-09-03T00:00:00-04:00" />
+<script type="application/ld+json">
+{"url":"http://localhost:4000/2019-09-03-Persistent-Homology-i/","headline":"An Introduction to Persistent Homology","dateModified":"2019-09-03T00:00:00-04:00","datePublished":"2019-09-03T00:00:00-04:00","author":{"@type":"Person","name":"John Bochicchio"},"description":"A basic introduction to the mathematics of persistent homology. This will be followed up with a post detailing applications to data science and showing code used to compute the persistent homology of some selected structures.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019-09-03-Persistent-Homology-i/"},"@type":"BlogPosting","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/icons/delta.png"},"name":"John Bochicchio"},"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  
+    <meta name="keywords" content="algebra,algebraic,geometry,data,science,mathematics,homology,topology">
+  
+
+
+<meta name="mobile-web-app-capable" content="yes">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="The Delta">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<meta name="application-name" content="The Delta">
+<meta name="msapplication-config" content="/assets/ieconfig.xml">
+
+
+<meta name="theme-color" content="rgb(25,55,71)">
+
+
+<meta name="generator" content="Hydejack v8.5.0" />
+
+<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="The Delta" />
+
+
+
+<link rel="alternate" href="http://localhost:4000/2019-09-03-Persistent-Homology-i/" hreflang="en-us">
+
+<link rel="shortcut icon" href="/assets/icons/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/icons/icon.png">
+
+<link rel="manifest" href="/assets/manifest.json">
+
+
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+
+
+
+
+<link rel="dns-prefetch" href="/" id="_baseURL">
+<link rel="dns-prefetch" href="/assets/js/hydejack-legacy-8.5.0.js" id="_hrefJS">
+<link rel="dns-prefetch" href="/sw.js" id="_hrefSW">
+<link rel="dns-prefetch" href="/assets/bower_components/fontfaceobserver/fontfaceobserver.standalone.js" id="_hrefFFO">
+<link rel="dns-prefetch" href="/assets/bower_components/katex/dist/katex.min.js" id="_hrefKatexJS">
+<link rel="dns-prefetch" href="/assets/bower_components/katex/dist/katex.min.css" id="_hrefKatexCSS">
+<link rel="dns-prefetch" href="/assets/bower_components/katex/dist/contrib/copy-tex.min.js" id="_hrefKatexCopyJS">
+<link rel="dns-prefetch" href="/assets/bower_components/katex/dist/contrib/copy-tex.min.css" id="_hrefKatexCopyCSS">
+<link rel="dns-prefetch" href="/assets/img/swipe.svg" id="_hrefSwipeSVG">
+
+
+
+
+<script>
+!function(e,t){"use strict";function n(e,t,n,r){e.addEventListener?e.addEventListener(t,n,r):e.attachEvent?e.attachEvent("on"+t,n):e["on"+t]=n}e.loadJS=function(e,r){var o=t.createElement("script");o.src=e,r&&n(o,"load",r,{once:!0});var a=t.scripts[0];return a.parentNode.insertBefore(o,a),o},e._loaded=!1,e.loadJSDeferred=function(r,o){function a(){e._loaded=!0,o&&n(d,"load",o,{once:!0});var r=t.scripts[0];r.parentNode.insertBefore(d,r)}var d=t.createElement("script");return d.src=r,e._loaded?a():n(e,"load",a,{once:!0}),d},e.setRel=e.setRelStylesheet=function(e){function n(){this.rel="stylesheet"}var r=t.getElementById(e);r.addEventListener?r.addEventListener("load",n,{once:!0}):r.onload=n}}(window,document);
+
+!function(a){"use strict";var b=function(b,c,d){function e(a){return h.body?a():void setTimeout(function(){e(a)})}function f(){i.addEventListener&&i.removeEventListener("load",f),i.media=d||"all"}var g,h=a.document,i=h.createElement("link");if(c)g=c;else{var j=(h.body||h.getElementsByTagName("head")[0]).childNodes;g=j[j.length-1]}var k=h.styleSheets;i.rel="stylesheet",i.href=b,i.media="only x",e(function(){g.parentNode.insertBefore(i,c?g:g.nextSibling)});var l=function(a){for(var b=i.href,c=k.length;c--;)if(k[c].href===b)return a();setTimeout(function(){l(a)})};return i.addEventListener&&i.addEventListener("load",f),i.onloadcssdefined=l,l(f),i};"undefined"!=typeof exports?exports.loadCSS=b:a.loadCSS=b}("undefined"!=typeof global?global:this);
+
+!function(a){if(a.loadCSS){var b=loadCSS.relpreload={};if(b.support=function(){try{return a.document.createElement("link").relList.supports("preload")}catch(b){return!1}},b.poly=function(){for(var b=a.document.getElementsByTagName("link"),c=0;c<b.length;c++){var d=b[c];"preload"===d.rel&&"style"===d.getAttribute("as")&&(a.loadCSS(d.href,d,d.getAttribute("media")),d.rel=null)}},!b.support()){b.poly();var c=a.setInterval(b.poly,300);a.addEventListener&&a.addEventListener("load",function(){b.poly(),a.clearInterval(c)}),a.attachEvent&&a.attachEvent("onload",function(){a.clearInterval(c)})}}}(this);
+
+!function(w, d) {
+  w._noPushState = false;
+  w._noDrawer = false;
+}(window, document);
+</script>
+
+<!--[if gt IE 8]><!---->
+
+
+
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="/assets/css/hydejack-8.5.0.css">
+  <link rel="stylesheet" href="/assets/icomoon/style.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab:400|Noto+Sans:400,400i,700,700i&display=swap">
+  
+
+
+  <style id="_pageStyle">
+
+.content a:not(.btn){color:#4fb1ba;border-color:rgba(79,177,186,0.2)}.content a:not(.btn):hover{border-color:#4fb1ba}:focus{outline-color:#4fb1ba !important}.btn-primary{color:#fff;background-color:#4fb1ba;border-color:#4fb1ba}.btn-primary:focus,.btn-primary.focus,.form-control:focus,.form-control.focus{box-shadow:0 0 0 3px rgba(79,177,186,0.5)}.btn-primary:hover,.btn-primary.hover{color:#fff;background-color:#409ba3;border-color:#409ba3}.btn-primary:disabled,.btn-primary.disabled{color:#fff;background-color:#4fb1ba;border-color:#4fb1ba}.btn-primary:active,.btn-primary.active{color:#fff;background-color:#409ba3;border-color:#409ba3}::selection{color:#fff;background:#4fb1ba}::-moz-selection{color:#fff;background:#4fb1ba}
+
+</style>
+
+
+<!--<![endif]-->
+
+
+
+
+</head>
+
+<body class="no-color-transition">
+  <div id="_navbar" class="navbar fixed-top">
+  <div class="content">
+    <div class="nav-btn-bar">
+      <span class="sr-only">Jump to:</span>
+      <a id="_menu" class="nav-btn no-hover fl" href="#_navigation">
+        <span class="sr-only">Navigation</span>
+        <span class="icon-menu"></span>
+      </a>
+      <!-- <a id="_search" class="nav-btn no-hover fl" href="#_search">
+        <span class="sr-only">Search</span>
+        <span class="icon-search"></span>
+      </a>
+      <form action="https://duckduckgo.com/" method="GET">
+        <div class="form-group fr">
+          <label class="sr-only" for="_search">Search</label>
+          <input id="_search" name="q" class="form-control" type="search" />
+        </div>
+        <input type="hidden" name="q" value="site:hydejack.com" />
+        <input type="hidden" name="ia" value="web" />
+      </form> -->
+    </div>
+  </div>
+</div>
+<hr class="sr-only" hidden />
+
+
+<hy-push-state
+  replace-ids="_main"
+  link-selector="a[href]:not([href*='/assets/']):not(.external):not(.no-push-state)"
+  duration="250"
+  script-selector="script:not([type^='math/tex'])"
+  prefetch
+>
+  
+    <main
+  id="_main"
+  class="content fade-in layout-post"
+  role="main"
+  data-color="rgb(79,177,186)"
+  data-theme-color="rgb(25,55,71)"
+  
+    data-image="/assets/img/Sel.jpg"
+    data-overlay
+  
+  >
+  
+
+
+
+
+<article id="post-Persistent-Homology-i" class="page post mb6" role="article">
+  <header>
+    <h1 class="post-title">
+      
+        An Introduction to Persistent Homology
+      
+    </h1>
+
+    <p class="post-date heading">
+      
+      <time datetime="2019-09-03T00:00:00-04:00">03 Sep 2019</time>
+      
+      
+      
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+      
+
+
+
+
+
+
+
+
+
+
+
+    </p>
+
+    
+    
+
+    
+
+
+
+  
+    <p class="message" >
+      A basic introduction to the mathematics of persistent homology. This will be followed up with a post detailing applications to data science and showing code used to compute the persistent homology of some selected structures.
+
+    </p>
+  
+
+
+  </header>
+
+  
+    <p>When analyzing a data set, one is often interested in the notion of finding some sort of global structure from representations which may not portray such a structure without much coaxing or insight. The raw data that one usually encounters tends to be given as a set of observations in <code class="MathJax_Preview">\mathbb{R}^n</code><script type="math/tex">\mathbb{R}^n</script> where <code class="MathJax_Preview">n</code><script type="math/tex">n</script> denotes some number of predictors. Of course, when <code class="MathJax_Preview">n \geq 4</code><script type="math/tex">n \geq 4</script> the ability for humans to visualize and consider the geometric features of such data sets becomes extremely minimal. It is clear then that we require some specialized tools and techniques to assist us in this regard. This suite of techniques comes from the intersection of topology and data analysis called <em>persistent homology</em>.</p>
+
+<p>In short, persistent homology allows us to use powerful tools from homological algebra and algebraic topology to analyze the geometric and topological features of data sets in a relatively computationally inexpensive manner. If we consider our data sets as carrying a topology, then we know that computing homotopy groups would be quite difficult. Moreover, due to noise in the data the computation of homotopy groups might not prove to be particularly telling. Instead, we turn our interest towards the <em>homology</em> groups of the data set, which are far easier to compute and generally very telling. Before we begin throwing tools from persistent homology at data, we must first gain an understanding of the basic objects we will be working with; simplicies, simplicial complexes, chain complexes, and finally homology groups. Once we do that, we will be in a good position to consider the applied aspects of the theory.</p>
+
+<p><strong>Definition:</strong> An <em>n-simplex</em>, <code class="MathJax_Preview">\Delta^n</code><script type="math/tex">\Delta^n</script>, is an <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-dimensional geometric object comprised of <code class="MathJax_Preview">n+1</code><script type="math/tex">n+1</script> points which generalizes the notion of a triangle to <code class="MathJax_Preview">n</code><script type="math/tex">n</script> dimensions. These simplices can also be thought of as complete graphs on <code class="MathJax_Preview">n+1</code><script type="math/tex">n+1</script> points as vertices.</p>
+
+<p>While the above definition might be somewhat opaque, the idea is very simple. A 0-simplex is a point, 1-simplex a line, 2-simplex a triangle, and so on from tetrahedron to <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-dimensional figures which one cannot adequately imagine. These <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-simplices have faces which match our geometric intuition. Particularly, a <code class="MathJax_Preview">k</code><script type="math/tex">k</script>-face is just a size <code class="MathJax_Preview">k+1</code><script type="math/tex">k+1</script> subset of the vertices in <code class="MathJax_Preview">\Delta^n</code><script type="math/tex">\Delta^n</script>. We can then identify faces of these simplices to arrive at structures called <em>simplicial complexes</em>, which we define as follows:</p>
+
+<p><strong>Definition:</strong>  A <em>simplicial <code class="MathJax_Preview">k</code><script type="math/tex">k</script>-complex</em>, <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script>, is a finite set of simplicies with vertices <code class="MathJax_Preview">\{v_0, \ldots, v_n\}</code><script type="math/tex">\{v_0, \ldots, v_n\}</script> which satisfies:</p>
+<ul>
+  <li>If <code class="MathJax_Preview">\Delta \in \mathcal{K}</code><script type="math/tex">\Delta \in \mathcal{K}</script> is a simplex, then every face of <code class="MathJax_Preview">\Delta</code><script type="math/tex">\Delta</script> is also a face of <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script>.</li>
+  <li>If <code class="MathJax_Preview">\Delta_1, \Delta_2 \in \mathcal{K}</code><script type="math/tex">\Delta_1, \Delta_2 \in \mathcal{K}</script> are two simplicies, then <code class="MathJax_Preview">\Delta_1 \cap \Delta_2</code><script type="math/tex">\Delta_1 \cap \Delta_2</script> is either empty or a face of both <code class="MathJax_Preview">\Delta_1</code><script type="math/tex">\Delta_1</script> and <code class="MathJax_Preview">\Delta_2</code><script type="math/tex">\Delta_2</script>.</li>
+  <li>The maximal dimension of the simplicies contained in <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> is <code class="MathJax_Preview">k</code><script type="math/tex">k</script>.</li>
+</ul>
+
+<p>We can embed a simplicial complex <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> into <code class="MathJax_Preview">\mathbb{R}^n</code><script type="math/tex">\mathbb{R}^n</script> by mapping its vertices into points in a number of ways, but all of these embeddings are topologically equivalent (i.e. homeomorphic). Simplicial complexes are key to understanding persistent homology, as they themselves are the principle object of analysis. In order to understand the notion of homology, we must provide an <em>orientation</em> for our simplices. If we denote by <code class="MathJax_Preview">V</code><script type="math/tex">V</script> the set of vertices <code class="MathJax_Preview">\{v_0, \ldots, v_n\}</code><script type="math/tex">\{v_0, \ldots, v_n\}</script> of a simplex <code class="MathJax_Preview">\Delta</code><script type="math/tex">\Delta</script>, then we can provide an orientation for <code class="MathJax_Preview">\Delta</code><script type="math/tex">\Delta</script> by imposing an ordering on <code class="MathJax_Preview">V</code><script type="math/tex">V</script>. If we apply an odd permutation to <code class="MathJax_Preview">V</code><script type="math/tex">V</script> with respect to the ordering then we get a reversed orientation, while an even permutation leaves the orientation constant. Hence, there are only two such orientation for any <code class="MathJax_Preview">\Delta</code><script type="math/tex">\Delta</script>, regardless of dimension. Of course, this choice of orientation then applies to all faces of the simplex as we would expect.</p>
+
+<p><strong>Definition:</strong> Let <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> be a simplicial complex containing <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-simplices <code class="MathJax_Preview">\Delta_1^n, \ldots, \Delta_k^n</code><script type="math/tex">\Delta_1^n, \ldots, \Delta_k^n</script> with orientation. Moreover, let <code class="MathJax_Preview">(G, *)</code><script type="math/tex">(G, *)</script> be an arbitrary abelian group (common choices for <code class="MathJax_Preview">G</code><script type="math/tex">G</script> include <code class="MathJax_Preview">\mathbb{Z}</code><script type="math/tex">\mathbb{Z}</script> and <code class="MathJax_Preview">\mathbb{Z}/n\mathbb{Z}</code><script type="math/tex">\mathbb{Z}/n\mathbb{Z}</script>, but such a choice is unnecessary in general). An <em>n-chain over</em> <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> is given by the formal sum 
+<code class="MathJax_Preview">c = \sum_{i=1}^k g_i\Delta_i^n</code><script type="math/tex">c = \sum_{i=1}^k g_i\Delta_i^n</script> 
+where each <code class="MathJax_Preview">g_i \in G</code><script type="math/tex">g_i \in G</script>.</p>
+
+<p>Note that the above definition applies to any set of simplicies of any dimension less than or equal to the dimension of the entire complex. For a given <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script>, we can form a new group from these <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chains which will be of significant importance in the eventual construction of homology groups.</p>
+
+<p><strong>Proposition:</strong> Let <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> be a simplicial complex, and let <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> be the set of <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chains over <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script>. Define an operation, <code class="MathJax_Preview">+</code><script type="math/tex">+</script>, by</p>
+
+<pre class="MathJax_Preview"><code>\begin{aligned}
++:C_n \times C_n &amp;\longrightarrow C_n \\
+\left(\sum_{i=1}^k g_i\Delta_i^n, \sum_{i=1}^k h_i\Delta_i^n\right) &amp;\longmapsto \sum_{i=1}^k (g_i * h_i)\Delta_i^n
+\end{aligned}</code></pre>
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
++:C_n \times C_n &\longrightarrow C_n \\
+\left(\sum_{i=1}^k g_i\Delta_i^n, \sum_{i=1}^k h_i\Delta_i^n\right) &\longmapsto \sum_{i=1}^k (g_i * h_i)\Delta_i^n
+\end{aligned} %]]></script>
+
+<p>Then the pair <code class="MathJax_Preview">(C_n, +)</code><script type="math/tex">(C_n, +)</script> forms a free abelian group.</p>
+
+<p><strong>Proof:</strong> The sum of any two chains in <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> provides another such chain, a fact which follows directly from the closure of <code class="MathJax_Preview">G</code><script type="math/tex">G</script>. Hence, <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> itself must be closed. The operation, <code class="MathJax_Preview">*</code><script type="math/tex">*</script>, from <code class="MathJax_Preview">G</code><script type="math/tex">G</script> is associative and commutative which implies that <code class="MathJax_Preview">+</code><script type="math/tex">+</script> must also be so. We then must show that <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> offers inverses and an identity. Since <code class="MathJax_Preview">G</code><script type="math/tex">G</script> has identity <code class="MathJax_Preview">e</code><script type="math/tex">e</script>, we can derive an identity <code class="MathJax_Preview">c_e = \sum_{i=1}^k e\Delta_i^n</code><script type="math/tex">c_e = \sum_{i=1}^k e\Delta_i^n</script> for <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script>. Let <code class="MathJax_Preview">c = \sum_{i=1}^k g_i\Delta_i^n</code><script type="math/tex">c = \sum_{i=1}^k g_i\Delta_i^n</script>. Then</p>
+
+<pre class="MathJax_Preview"><code>\begin{aligned}
+c + c_e &amp;= \sum_{i=1}^k g_i\Delta_i^n + \sum_{i=1}^k e\Delta_i^n \\
+&amp;= \sum_{i=1}^k (g_i*e)\Delta_i^n = \sum_{i=1}^k g_i\Delta_i^n \\
+&amp;= c
+\end{aligned}</code></pre>
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+c + c_e &= \sum_{i=1}^k g_i\Delta_i^n + \sum_{i=1}^k e\Delta_i^n \\
+&= \sum_{i=1}^k (g_i*e)\Delta_i^n = \sum_{i=1}^k g_i\Delta_i^n \\
+&= c
+\end{aligned} %]]></script>
+
+<p>Because <code class="MathJax_Preview">G</code><script type="math/tex">G</script> is a group, each <code class="MathJax_Preview">g_i</code><script type="math/tex">g_i</script> must have an inverse. Hence, we can define</p>
+
+<pre class="MathJax_Preview"><code>-c = \sum_{i=1}^k g_i^{-1}\Delta_i^n</code></pre>
+<script type="math/tex; mode=display">-c = \sum_{i=1}^k g_i^{-1}\Delta_i^n</script>
+
+<p>We have then:</p>
+
+<pre class="MathJax_Preview"><code>\begin{aligned}
+c + (-c) &amp;= \sum_{i=1}^k g_i\Delta_i^n + \sum_{i=1}^k g_i^{-1}\Delta_i^n \\
+&amp;= \sum_{i=1}^k (g_i*g_i^{-1})\Delta_i^n = \sum_{i=1}^k e\Delta_i^n \\
+&amp;= c_e
+\end{aligned}</code></pre>
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+c + (-c) &= \sum_{i=1}^k g_i\Delta_i^n + \sum_{i=1}^k g_i^{-1}\Delta_i^n \\
+&= \sum_{i=1}^k (g_i*g_i^{-1})\Delta_i^n = \sum_{i=1}^k e\Delta_i^n \\
+&= c_e
+\end{aligned} %]]></script>
+
+<p>So, <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> is certainly an abelian group. It is clear that the set <code class="MathJax_Preview">\{ \Delta_1, \ldots, \Delta_k \}</code><script type="math/tex">\{ \Delta_1, \ldots, \Delta_k \}</script> of simplices of <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> form a minimal basis of generators for <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script>. Hence, <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> is a free abelian group as desired. <code class="MathJax_Preview">\blacksquare</code><script type="math/tex">\blacksquare</script></p>
+
+<p>Now that we have these groups of <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chains, we want to construct maps relating them to one and other in an ordered way. One such map is called the <em>boundary operator</em>.</p>
+
+<p><strong>Definition:</strong> Let <code class="MathJax_Preview">\Delta^n</code><script type="math/tex">\Delta^n</script> be a simplex in the basis of <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> with vertices <code class="MathJax_Preview">(v_0, \ldots, v_n)</code><script type="math/tex">(v_0, \ldots, v_n)</script>. The <em>boundary operator</em> is given by</p>
+
+<pre class="MathJax_Preview"><code>\partial_n(\Delta^n) = \sum_{i=0}^n (-1)^i(v_0, \ldots, v_{i-1}, v_{i+1}, \ldots, v_n)</code></pre>
+<script type="math/tex; mode=display">\partial_n(\Delta^n) = \sum_{i=0}^n (-1)^i(v_0, \ldots, v_{i-1}, v_{i+1}, \ldots, v_n)</script>
+
+<p>Here, <code class="MathJax_Preview">(v_0, \ldots, v_{i-1}, v_{i+1}, \ldots, v_n)</code><script type="math/tex">(v_0, \ldots, v_{i-1}, v_{i+1}, \ldots, v_n)</script> is a face of <code class="MathJax_Preview">\Delta</code><script type="math/tex">\Delta</script> arising from the deletion of <code class="MathJax_Preview">v_i</code><script type="math/tex">v_i</script>. Commonly, this is notated as <code class="MathJax_Preview">(v_0, \ldots, \hat{v_i}, \ldots, v_n)</code><script type="math/tex">(v_0, \ldots, \hat{v_i}, \ldots, v_n)</script>.</p>
+
+<p>More specifically, the boundary operator <code class="MathJax_Preview">\partial_n</code><script type="math/tex">\partial_n</script> is a homomorphism of groups when applied to <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> in the following way:</p>
+
+<pre class="MathJax_Preview"><code>\begin{aligned}
+\partial_n \colon C_n &amp;\longrightarrow C_{n-1} \\
+\sum_{i=1}^k g_i\Delta_i^n &amp;\mapsto \sum_{i=1}^k g_i\partial_n(\Delta_i^n)
+\end{aligned}</code></pre>
+<script type="math/tex; mode=display">% <![CDATA[
+\begin{aligned}
+\partial_n \colon C_n &\longrightarrow C_{n-1} \\
+\sum_{i=1}^k g_i\Delta_i^n &\mapsto \sum_{i=1}^k g_i\partial_n(\Delta_i^n)
+\end{aligned} %]]></script>
+
+<p>We can consider these sets of <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chains and boundary operators on a larger scale to arrive at a new object, the <em>chain complex</em>.</p>
+
+<p><strong>Definition:</strong> A <em>chain complex</em> is a set of <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chain groups <code class="MathJax_Preview">C_n</code><script type="math/tex">C_n</script> together with boundary operators <code class="MathJax_Preview">\partial_n</code><script type="math/tex">\partial_n</script> which form a sequence of maps</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/chain_complex.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/chain_complex.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>While we can have maps of <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-chain groups, it is sometimes just as important to consider mappings of chain complexes.</p>
+
+<p><strong>Example:</strong> Let <code class="MathJax_Preview">\mathcal{A}_*, \mathcal{B}_*</code><script type="math/tex">\mathcal{A}_*, \mathcal{B}_*</script> and <code class="MathJax_Preview">\mathcal{C}_*</code><script type="math/tex">\mathcal{C}_*</script> be chain complexes. We can define maps</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/chain_complex_mapping.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/chain_complex_mapping.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>These maps give us the following diagram:</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/chain_complex_mapping_closer_look.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/chain_complex_mapping_closer_look.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>Note that if our first sequence is exact, then each sequence</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/sub_exact_sequence.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/sub_exact_sequence.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>must be exact as well. This fact can sometimes assist us in computing homology groups.</p>
+
+<p>Recall that each <code class="MathJax_Preview">C_i</code><script type="math/tex">C_i</script> is an abelian group, which provides the normality of all subgroups. This is crucial, because it allows us to finally reach the definition of a homology group that we’ve been building up for so long.</p>
+
+<p><strong>Definition:</strong> Let <code class="MathJax_Preview">Z_n(\mathcal{K}) = \text{ker}(\partial_n)</code><script type="math/tex">Z_n(\mathcal{K}) = \text{ker}(\partial_n)</script> and <code class="MathJax_Preview">B_n(\mathcal{K}) = \text{im}(\partial_{n+1})</code><script type="math/tex">B_n(\mathcal{K}) = \text{im}(\partial_{n+1})</script>. Define the <code class="MathJax_Preview">n^\text{th}</code><script type="math/tex">n^\text{th}</script> <em>homology group</em> of <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script> over <code class="MathJax_Preview">G</code><script type="math/tex">G</script> as</p>
+
+<pre class="MathJax_Preview"><code>H_n(\mathcal{K}; G) = Z_n(\mathcal{K})/B_n(\mathcal{K})</code></pre>
+<script type="math/tex; mode=display">H_n(\mathcal{K}; G) = Z_n(\mathcal{K})/B_n(\mathcal{K})</script>
+
+<p>It is easy to see that <code class="MathJax_Preview">H_n(\mathcal{K}, G)</code><script type="math/tex">H_n(\mathcal{K}, G)</script> is in-fact an abelian group. In the common case that <code class="MathJax_Preview">G = \mathbb{Z}</code><script type="math/tex">G = \mathbb{Z}</script>, we simply write <code class="MathJax_Preview">H_n(\mathcal{K})</code><script type="math/tex">H_n(\mathcal{K})</script> for the <code class="MathJax_Preview">n^\text{th}</code><script type="math/tex">n^\text{th}</script> homology group of <code class="MathJax_Preview">\mathcal{K}</code><script type="math/tex">\mathcal{K}</script>. In the case that our chain complex forms an exact sequence, we have all homology groups <code class="MathJax_Preview">H_n(\mathcal{K}; G) = 0</code><script type="math/tex">H_n(\mathcal{K}; G) = 0</script>. This is known as <em>trivial homology</em>.</p>
+
+<p>The idea of persistent homology as it applies to data analysis stems from the theory of simplicial homology we have just expounded. From a high-level perspective, the general idea is to construct simplicial complexes from data sets to attain topological objects for which we can compute homology and attain some understanding of a greater structure. While simplicial homology seems purely algebraic in nature, the ideas we will present for the persistent formulation of the theory have a nice geometric bend which makes interpreting our results relatively simple and intuitive. All of the algebraic objects we will be considering from this point on have clear geometric interpretations, and relatively easily pictured ones at that!</p>
+
+<p>We will assume for the sake of simplicity that all points in our data sets will take values in <code class="MathJax_Preview">\mathbb{R}</code><script type="math/tex">\mathbb{R}</script>, so we get data that resides in <code class="MathJax_Preview">\mathbb{R}^k</code><script type="math/tex">\mathbb{R}^k</script> where <code class="MathJax_Preview">k</code><script type="math/tex">k</script> is the number of relevant predictors. While there are likely an infinite number of ways to take a set of data and define a simplicial complex from it, perhaps the most natural and least computationally expensive way involves defining each point as a vertex, and making connections depending on some prescribed distance. We consider <code class="MathJax_Preview">\mathbb{R}^k</code><script type="math/tex">\mathbb{R}^k</script> with the Euclidean topology for our purposes, which allows us access to the Euclidean metric for distance. Note however that in an abstract sense any metrizable topological space <em>should</em> work without issue, as we try to avoid any steps which specifically require <code class="MathJax_Preview">\mathbb{R}^k</code><script type="math/tex">\mathbb{R}^k</script> with the Euclidean metric in particular.</p>
+
+<p>More formally, we can define the particular simplicial complex of interest as such:</p>
+
+<p><strong>Definition:</strong> Let <code class="MathJax_Preview">\mathbb{D} = \{ x_\alpha \}_\alpha</code><script type="math/tex">\mathbb{D} = \{ x_\alpha \}_\alpha</script> be a set consisting of points in <code class="MathJax_Preview">\mathbb{R}^k</code><script type="math/tex">\mathbb{R}^k</script>, and choose a distance <code class="MathJax_Preview">d \in \mathbb{R}</code><script type="math/tex">d \in \mathbb{R}</script>. The <em>Vietoris-Rips complex</em>, <code class="MathJax_Preview">\mathcal{R}_d(\mathbb{D})</code><script type="math/tex">\mathcal{R}_d(\mathbb{D})</script>, is the simplicial complex with <code class="MathJax_Preview">n</code><script type="math/tex">n</script>-simplices corresponding to (<code class="MathJax_Preview">n+1</code><script type="math/tex">n+1</script>)-tuples <code class="MathJax_Preview">\{x_\alpha\}_{\alpha=0}^n</code><script type="math/tex">\{x_\alpha\}_{\alpha=0}^n</script> falling within distance <code class="MathJax_Preview">d</code><script type="math/tex">d</script> of one and other pairwise. This is commonly (and more compactly) known simply as the <em>Rips complex</em> of <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script>. For brevity, if the set <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script> is fixed and known we simply write <code class="MathJax_Preview">\mathcal{R}_d</code><script type="math/tex">\mathcal{R}_d</script> to denote the relevant complex.</p>
+
+<p>As a toy example, we will be considering the following set of points, <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script>, sampled from an annulus:</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/base-example.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/base-example.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>We choose a distance <code class="MathJax_Preview">d</code><script type="math/tex">d</script> which will be used to construct <code class="MathJax_Preview">\mathcal{R}_d(\mathbb{D})</code><script type="math/tex">\mathcal{R}_d(\mathbb{D})</script>, and represent this distance by the purple disk about each point. We then connect each point whose disks overlap to arrive at the relevant Rips complex.</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/large-distance.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/large-distance.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>Note however that <code class="MathJax_Preview">d</code><script type="math/tex">d</script> was chosen carefully as to show the hole in the data through a nearly perfectly illustrative simplicial complex. The question immediately arises then as to how one chooses <code class="MathJax_Preview">d</code><script type="math/tex">d</script> to provide good results. If <code class="MathJax_Preview">d</code><script type="math/tex">d</script> is chosen to be too small, we get a complex comprised entirely of discrete points which is precisely <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script>. On the other hand, if we choose a <code class="MathJax_Preview">d</code><script type="math/tex">d</script> that is too large it is easy to see that we get one giant simplex which will relay no information about potential holes in <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script> at all. As we vary our choice for <code class="MathJax_Preview">d</code><script type="math/tex">d</script>, the complexes <code class="MathJax_Preview">\mathcal{R}_d</code><script type="math/tex">\mathcal{R}_d</script> will reveal and hide various small holes on <code class="MathJax_Preview">\mathbb{D}</code><script type="math/tex">\mathbb{D}</script> as points slowly branch out an connect to one and other. For example, suppose we chose a value for <code class="MathJax_Preview">d</code><script type="math/tex">d</script> only slightly smaller in diameter than that of the image above. Then we get an image with two smaller holes not seen in the above representation.</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/two-extra-holes.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/two-extra-holes.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>This brings us to the <em>persistence</em> in persistent homology. Generally speaking, our strategy is to vary <code class="MathJax_Preview">d</code><script type="math/tex">d</script> continuously and see which holes persist for notably long periods of time. These holes are likely to be relevant features of the data instead of transient quirks arising from poorly representative choices of <code class="MathJax_Preview">d</code><script type="math/tex">d</script>. Suppose we choose increasing values of <code class="MathJax_Preview">d</code><script type="math/tex">d</script> indexed by <code class="MathJax_Preview">i</code><script type="math/tex">i</script>, giving us a sequence <code class="MathJax_Preview">\{d_i\}_{i=1}^n</code><script type="math/tex">\{d_i\}_{i=1}^n</script>. Since <code class="MathJax_Preview">d_i &lt; d_{i+1}</code><script type="math/tex">% <![CDATA[
+d_i < d_{i+1} %]]></script>, it follows that <code class="MathJax_Preview">\mathcal{R}_{d_i} \subseteq \mathcal{R}_{d_{i+1}}</code><script type="math/tex">\mathcal{R}_{d_i} \subseteq \mathcal{R}_{d_{i+1}}</script>. This gives us a chain of inclusions</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/inclusion-chain.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/inclusion-chain.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p>which looks quite similar to the chain complexes we have run into before.</p>
+
+<p>
+  <hy-img root-margin="512px"  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/rips-sequence.png" alt="" >
+    <noscript><img data-ignore  src="http://localhost:4000/assets/img/ph-images/Persistent-Homology/rips-sequence.png" alt="" /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img></p>
+
+<p><strong>Definition:</strong> Each hole arising in our chain complex first appears at some value, say <code class="MathJax_Preview">d_\alpha</code><script type="math/tex">d_\alpha</script>. Because a large enough choice for <code class="MathJax_Preview">d</code><script type="math/tex">d</script> will always provide us with a single simplex, there must be some distance <code class="MathJax_Preview">d_\zeta</code><script type="math/tex">d_\zeta</script> for which this hole disappears. We can define the <em>persistence</em> of the hole then as the interval <code class="MathJax_Preview">[d_\alpha, d_\zeta]</code><script type="math/tex">[d_\alpha, d_\zeta]</script>. This allows us to quantify roughly how significant of a feature each hole is.</p>
+
+<p>Each of these intervals is a <em>bar</em> in a larger geometric object known as a <em>barcode</em>. These barcodes allow us to see which holes are genuine features of a data set, and which exist due to conditions caused by variations in the distance parameter. We can actually characterize these barcodes purely algebraically by constructing a <em>persistence module</em> and computing its homology. To do this, we first create a <em>persistence complex</em> from our Rips complexes and endow it with some extra structure.</p>
+
+<p><strong>Definition:</strong> A <em>persistence complex</em> is a sequence of complexes <code class="MathJax_Preview">\mathcal{C} = (C_*^i)_i</code><script type="math/tex">\mathcal{C} = (C_*^i)_i</script> with maps <code class="MathJax_Preview">x \colon C_*^i \rightarrow C_*^{i+1}</code><script type="math/tex">x \colon C_*^i \rightarrow C_*^{i+1}</script>. This is a generalization of the situation we currently have with Rips complexes, simply replace <code class="MathJax_Preview">\mathcal{C} = (C_*^i)_i</code><script type="math/tex">\mathcal{C} = (C_*^i)_i</script> by <code class="MathJax_Preview">\mathbf{R} = (\mathcal{R}_{d_i})_i</code><script type="math/tex">\mathbf{R} = (\mathcal{R}_{d_i})_i</script> and <code class="MathJax_Preview">x</code><script type="math/tex">x</script> by the inclusion. We will be performing the rest of the algebraic exposition using <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> for the sake of generality.</p>
+
+<p>These mappings, <code class="MathJax_Preview">x</code><script type="math/tex">x</script>, induce homomorphisms on the homology groups of the persistence complexes. These homology groups make up the <em>persistent homology</em> of <code class="MathJax_Preview">\mathbf{R}</code><script type="math/tex">\mathbf{R}</script>.</p>
+
+<p><strong>Definition:</strong> The <code class="MathJax_Preview">(i,j)</code><script type="math/tex">(i,j)</script>-persistent homology of <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script>, <code class="MathJax_Preview">H_*^{i \rightarrow j}(\mathcal{C})</code><script type="math/tex">H_*^{i \rightarrow j}(\mathcal{C})</script>, is given by image of</p>
+
+<pre class="MathJax_Preview"><code>x_* \colon H_*(C_*^i) \rightarrow H_*(C_*^j)</code></pre>
+<script type="math/tex; mode=display">x_* \colon H_*(C_*^i) \rightarrow H_*(C_*^j)</script>
+
+<p>Of course, computing the homology of <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> is no simple task. While wading through the necessary sea of homological algebra to accomplish this may be daunting for a mathematician, it is nearly impossible for a machine to do on first principles. Instead, we need to equip <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> with additional structure to allow us to easily classify its homology. Let <code class="MathJax_Preview">\mathbb{F}</code><script type="math/tex">\mathbb{F}</script> be some fixed field. As far as the algebra is concerned any field will work, but from a computational standpoint it is best to stick with something small such as <code class="MathJax_Preview">\mathbb{Z}/2\mathbb{Z}</code><script type="math/tex">\mathbb{Z}/2\mathbb{Z}</script>. We can equip <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> with the structure of a graded <code class="MathJax_Preview">\mathbb{F}[x]</code><script type="math/tex">\mathbb{F}[x]</script>-module, where the action of <code class="MathJax_Preview">x \in \mathbb{F}[x]</code><script type="math/tex">x \in \mathbb{F}[x]</script> works to shift the <code class="MathJax_Preview">C_*^i</code><script type="math/tex">C_*^i</script>’s. We then arrive at a classification for the homology of <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> over <code class="MathJax_Preview">\mathbb{F}</code><script type="math/tex">\mathbb{F}</script>:</p>
+
+<p><strong>Theorem:</strong> Let <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> be a persistence complex endowed with an <code class="MathJax_Preview">\mathbb{F}[x]</code><script type="math/tex">\mathbb{F}[x]</script>-module structure. Then the structure of the homology of <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> is given by</p>
+
+<pre class="MathJax_Preview"><code>H_*(\mathcal{C}; \mathbb{F}) \cong \bigoplus_i x^{t_i} \cdot \mathbb{F}[x] \oplus \left(  \bigoplus_j x^{r_j} \cdot \left( \mathbb{F}[x]/(x^{s_j} \cdot \mathbb{F}[x])  \right) \right)</code></pre>
+<script type="math/tex; mode=display">H_*(\mathcal{C}; \mathbb{F}) \cong \bigoplus_i x^{t_i} \cdot \mathbb{F}[x] \oplus \left(  \bigoplus_j x^{r_j} \cdot \left( \mathbb{F}[x]/(x^{s_j} \cdot \mathbb{F}[x])  \right) \right)</script>
+
+<p>Here, <code class="MathJax_Preview">t_i</code><script type="math/tex">t_i</script> corresponds to homology generators (i.e. holes) who appear at <code class="MathJax_Preview">i</code><script type="math/tex">i</script> and persist over <code class="MathJax_Preview">i</code><script type="math/tex">i</script>. Moreover, <code class="MathJax_Preview">r_j</code><script type="math/tex">r_j</script> and <code class="MathJax_Preview">s_j</code><script type="math/tex">s_j</script> are parameters which signal generators appearing at <code class="MathJax_Preview">r_j</code><script type="math/tex">r_j</script> and disappearing at <code class="MathJax_Preview">r_j + s_j</code><script type="math/tex">r_j + s_j</script>. This more rigorous algebraic treatment allows a (relatively) easy decomposition and classification of the homology of the module. Also note that <code class="MathJax_Preview">\mathcal{C}</code><script type="math/tex">\mathcal{C}</script> can be decomposed into individual bars</p>
+
+<pre class="MathJax_Preview"><code>\mathcal{C} = \bigoplus_j \mathcal{C}^{I_j}</code></pre>
+<script type="math/tex; mode=display">\mathcal{C} = \bigoplus_j \mathcal{C}^{I_j}</script>
+
+<p>where each <code class="MathJax_Preview">C^{I_j}</code><script type="math/tex">C^{I_j}</script> is a module representing some bar in our bar code. In the next post, we will use a Python package, Dionysus, to perform some data analysis using persistent homology.</p>
+
+  
+</article>
+
+
+<hr class="dingbat related" />
+
+
+
+
+  
+     
+
+
+  <aside class="about related mt4 mb4" role="complementary">
+    
+    
+
+<div class="author mt4">
+  
+
+  
+    
+
+
+  <hy-img
+    
+    src="/assets/icons/delta.png"
+    class="avatar"
+    alt="John Bochicchio"
+    
+    
+  
+    
+    root-margin="512px"
+  >
+    <noscript><img data-ignore 
+    src="/assets/icons/delta.png"
+    class="avatar"
+    alt="John Bochicchio"
+    
+    
+  /></noscript>
+    <span class="loading" slot="loading" hidden>
+      <span class="icon-cog"></span>
+    </span>
+  </hy-img>
+
+
+  
+
+  
+  
+  <h2  class="page-title hr">
+    About
+  </h2>
+
+  <p>I recieved my degree in pure mathematics from the University of Connecticut in May 2019. My primary mathematical interests currently concern the interplay between algebraic geometry, algebraic topology, and data science. I currently work full time at the university as a software developer, and research algebraic data science in my spare time.</p>
+
+
+  <div class="sidebar-social">
+    <span class="sr-only">Social:</span>
+<ul>
+  
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="https://github.com/jpbochicchio" title="GitHub" class="no-mark-external">
+      <span class="icon-github"></span>
+      <span class="sr-only">GitHub</span>
+    </a>
+  </li>
+
+
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="mailto:jpbochicchio@gmail.com" title="Email" class="no-mark-external">
+      <span class="icon-mail"></span>
+      <span class="sr-only">Email</span>
+    </a>
+  </li>
+
+
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="https://news.ycombinator.com/user?id=Affine_Stack" title="Hacker News" class="no-mark-external">
+      <span class="icon-hackernews"></span>
+      <span class="sr-only">Hacker News</span>
+    </a>
+  </li>
+
+
+    
+  
+</ul>
+
+  </div>
+</div>
+
+  </aside>
+
+
+  
+
+  
+  
+
+  
+    
+
+
+
+
+  
+
+  
+  
+
+
+  
+
+  
+<footer role="contentinfo">
+  <hr/>
+  
+    <p><small class="copyright">© 2019. All rights reserved.
+</small></p>
+  
+  
+  <p><small>Powered by <a class="external" href="https://hydejack.com/">Hydejack</a> v<span id="_version">8.5.0</span></small></p>
+  <hr class="sr-only"/>
+</footer>
+
+
+</main>
+
+    <hy-drawer
+  class=""
+  align="left"
+  threshold="10"
+  touch-events
+  prevent-default
+>
+  <header id="_sidebar" class="sidebar" role="banner">
+    
+    <div class="sidebar-bg sidebar-overlay" style="background-color:rgb(25,55,71);background-image:url(/assets/img/Sel.jpg)"></div>
+
+    <div class="sidebar-sticky">
+      <div class="sidebar-about">
+        
+          <a class="no-hover" href="/" tabindex="-1">
+            <img src="/assets/icons/delta.png" class="avatar" alt="The Delta" data-ignore />
+          </a>
+        
+        <h2 class="h1"><a href="/">The Delta</a></h2>
+        
+        
+          <p class="">
+            A blog where I write about the interplay between algebra, data science, and programming
+
+          </p>
+        
+      </div>
+
+      <nav class="sidebar-nav heading" role="navigation">
+        <span class="sr-only">Navigation:</span>
+<ul>
+  
+    
+    
+    
+
+    
+  
+</ul>
+
+      </nav>
+
+      
+
+      <div class="sidebar-social">
+        <span class="sr-only">Social:</span>
+<ul>
+  
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="https://github.com/jpbochicchio" title="GitHub" class="no-mark-external">
+      <span class="icon-github"></span>
+      <span class="sr-only">GitHub</span>
+    </a>
+  </li>
+
+
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="mailto:jpbochicchio@gmail.com" title="Email" class="no-mark-external">
+      <span class="icon-mail"></span>
+      <span class="sr-only">Email</span>
+    </a>
+  </li>
+
+
+    
+      
+
+
+
+  
+
+  
+  
+  
+  
+
+  
+
+  
+
+  <li>
+    <a href="https://news.ycombinator.com/user?id=Affine_Stack" title="Hacker News" class="no-mark-external">
+      <span class="icon-hackernews"></span>
+      <span class="sr-only">Hacker News</span>
+    </a>
+  </li>
+
+
+    
+  
+</ul>
+
+      </div>
+    </div>
+  </header>
+</hy-drawer>
+<hr class="sr-only" hidden />
+
+  
+</hy-push-state>
+
+<!--[if gt IE 10]><!---->
+
+  <script type="module">window.__ESM__=!0; import '/assets/js/hydejack-8.5.0.js';</script>
+  <script nomodule>if (!window.__ESM__) loadJSDeferred(document.getElementById('_hrefJS').href);</script>
+  
+
+
+  
+
+
+<!--<![endif]-->
+
+
+
+
+<h2 class="sr-only" hidden>Templates (for web app):</h2>
+
+<template id="_animation-template" hidden>
+  <div class="animation-main fixed-top">
+    <div class="content">
+      <div class="page"></div>
+    </div>
+  </div>
+</template>
+
+<template id="_loading-template" hidden>
+  <div class="loading nav-btn fr">
+    <span class="sr-only">Loading…</span>
+    <span class="icon-cog"></span>
+  </div>
+</template>
+
+<template id="_error-template" hidden>
+  <div class="page">
+    <h1 class="page-title">Error</h1>
+    
+    
+    <p class="lead">
+      Sorry, an error occurred while loading <a class="this-link" href=""></a>.
+
+    </p>
+  </div>
+</template>
+
+<template id="_forward-template" hidden>
+  <button id="_forward" class="forward nav-btn no-hover fl">
+    <span class="sr-only">Forward</span>
+    <span class="icon-arrow-right2"></span>
+  </button>
+</template>
+
+<template id="_back-template" hidden>
+  <button id="_back" class="back nav-btn no-hover fl">
+    <span class="sr-only">Back</span>
+    <span class="icon-arrow-left2"></span>
+  </button>
+</template>
+
+<template id="_permalink-template" hidden>
+  <a href="#" class="permalink">
+    <span class="sr-only">Permalink</span>
+    <span class="icon-link"></span>
+  </a>
+</template>
+
+
+
+
+</body>
+</html>
