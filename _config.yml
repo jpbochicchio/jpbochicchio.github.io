@@ -24,14 +24,14 @@ title:                 The Delta
 # A short description (~150 chars) of the page used for the meta description tag.
 # Can use markdown, but no more than one paragraph (enforced by `>`)
 description:           >
-  A blog where I write about the interplay between algebra, data science, and programming
+  A blog where I write about algebra, data science, programming, and their interplay
 
 # A shorter description for the sidebar.
 tagline:               >
-  A blog where I write about the interplay between algebra, data science, and programming
+  A blog where I write about algebra, data science, programming, and their interplay
 
 # A list of keywords for your blog
-keywords:              [algebra, algebraic, geometry, data, science, mathematics, homology, topology]
+keywords:              [algebra, algebraic, geometry, data, science, mathematics, homology, topology, statistics]
 
 # A (square) logo for your site.
 # If provided, it will be shown at the top of the sidebar.
