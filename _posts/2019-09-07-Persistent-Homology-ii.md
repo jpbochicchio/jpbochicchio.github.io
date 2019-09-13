@@ -48,7 +48,7 @@ Using a similar process we generated three copies of the initial annulus, positi
 
 We can also compute the persistent homology of figures in higher dimensions than 2. We generated a sphere using the VonMisesFisher distribution that can be found in the Tensorflow probability package.
 
-```Python
+```python
 import dionysus._dionysus as d
 import dionysus.plot as plot
 import tensorflow as tf
