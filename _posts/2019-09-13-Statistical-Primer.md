@@ -14,7 +14,7 @@ First, we'd like to develop the notion of a _probability space_; a collection co
 
 In general, we will consider all sample spaces discussed to be finite or countably infinite. We will deal with cases of uncountably infinite sample spaces separately as they arise (this is a far more interesting topic, but not necessarily one which should be addressed in a basic primer). 
 
-**Definition:**A $$\sigma$$-_algebra_ over a sample space $$\Omega$$ is a subset $$\mathcal{F} \subset \mathcal{P}(\Omega)$$ satisfying the following criteria:
+**Definition:**A _$$\sigma$$-algebra_ over a sample space $$\Omega$$ is a subset $$\mathcal{F} \subset \mathcal{P}(\Omega)$$ satisfying the following criteria:
 - The relationship $$\Omega \in \mathcal{F}$$ holds
 - If $$U \in \mathcal{F}$$, then $$U^\text{c} \in \mathcal{F}$$
 - If a countable number of subsets $$U_1, U_2, \ldots \in \mathcal{F}$$, then their union $$\bigcup_{i=1}^\infty U_i \in \mathcal{F}$$
