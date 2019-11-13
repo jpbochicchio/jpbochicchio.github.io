@@ -9,7 +9,7 @@ author1:
   # Used at the bottom of each page and at the top of the `about` layout
   # Markdown enabled, can use multiple paragraphs (enabled by `|`)
   about: |
-    I recieved my degree in pure mathematics from the University of Connecticut in May 2019. My primary mathematical interests currently concern the interplay between algebraic geometry, algebraic topology, and data science. I currently work full time at the university as a software developer, and research algebraic data science in my spare time.
+    I recieved my degree in pure mathematics from the University of Connecticut in May 2019. My primary mathematical interests currently concern the interplay between algebraic geometry, algebraic topology, and data science. I currently work full time at The Hartford in QA as an SDET, and research algebraic data science in my spare time.
 
   # This photo will be used in the about section.
   picture:
